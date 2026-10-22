@@ -1,0 +1,262 @@
+{
+  "name": "CobraK WhatsApp Auto Reply Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "id": "1b6b15f4-f5f0-4823-8ebc-ece4e98c60b8",
+      "name": "WhatsApp Trigger",
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        0
+      ],
+      "webhookId": "6111090e-20b3-415e-9ddf-8282265e2561",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "4t3HIzZhsy4DuGH9",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.messages?.[0]?.text?.body ?? \"\" }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0c351ff5-6f71-41e4-9102-8cb4238d7b2c",
+      "name": "Only Incoming Text Messages",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -128,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.messages[0].text.body.trim().toLowerCase() }}",
+                    "rightValue": "^(5|e-?books?)$",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Ebook"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.messages[0].text.body.trim().toLowerCase() }}",
+                    "rightValue": "^(6|garnets?)$",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Garnets"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Menu"
+        }
+      },
+      "id": "e3126292-e654-4047-b5e4-c90613ff0790",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        128,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "1296982926841487",
+        "recipientPhoneNumber": "={{ $json.messages[0].from }}",
+        "textBody": "Thank you for selecting Ebooks & Technical Guides!\n\nHere is your access link: https://yourdomain.com/ebook-guide\n\nFeel free to reply if you have any questions!",
+        "additionalFields": {}
+      },
+      "id": "5711af7a-1aaa-4109-b5fc-caab5d89aa77",
+      "name": "Send Ebook Reply",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        -192
+      ],
+      "webhookId": "900681c8-494f-47a3-be73-e471ad11af48",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "Iu9RwLsSAAe4ML8u",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "1296982926841487",
+        "recipientPhoneNumber": "={{ $json.messages[0].from }}",
+        "textBody": "Thank you for inquiring about High-Quality Garnets!\n\nWe source rough Rhodolite, Spessartine, and fine gems.\n\nPlease reply with your preferred clarity, size, or weight range (in grams/carats) to receive photos and pricing!",
+        "additionalFields": {}
+      },
+      "id": "0414ef59-89f8-4998-bc1d-67ce8aa3b1cc",
+      "name": "Send Garnets Reply",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        0
+      ],
+      "webhookId": "384c10bd-1a56-4a31-bb85-5edf42558969",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "Iu9RwLsSAAe4ML8u",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "1296982926841487",
+        "recipientPhoneNumber": "={{ $json.messages[0].from }}",
+        "textBody": "Hello there! Thank you for reaching out to us.\n\nWe provide digital solutions and automated services to help you scale your projects and business efficiency:\n\n🛠️ Our Services:\n1️⃣ AI Automations (Custom workflows & bot integrations)\n2️⃣ AI Prompts (High-converting, specialized prompt libraries)\n3️⃣ Notion Templates (Organized systems & productivity hubs)\n4️⃣ Data Analysis (Actionable insights, dashboards & reports)\n5️⃣ eBooks (In-depth guides & technical resources)\n6️⃣ Garnets (High-quality gemstone sourcing & inquiries)\n\nHow can we assist you today?\n\nReply with the number or service name you are interested in, and we will get right back to you!",
+        "additionalFields": {}
+      },
+      "id": "7132f92c-f1c0-457e-bee1-8ad1c0a5a86a",
+      "name": "Send Welcome Menu",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        -96,
+        0
+      ],
+      "webhookId": "dbb91782-e2c9-4796-9772-6325ec4b4070",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "Iu9RwLsSAAe4ML8u",
+          "name": "WhatsApp account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "Only Incoming Text Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Only Incoming Text Messages": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Send Ebook Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Garnets Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Welcome Menu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "2724747d-5b32-4897-82b3-a78068aa1c19",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "46ab3384bb789f90537ceb44b501c016274bf942a7052ae5cb90c510e1ed1905"
+  },
+  "nodeGroups": [],
+  "id": "I3L3gnfLl6WMc3Ry",
+  "tags": []
+}
